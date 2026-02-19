@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream House • Light Blue Atmosphere</title>
+
+  <!-- A-Frame core and extras -->
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #c6e6ff; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    /* soft UI – light blue theme */
+    #info-panel {
+      position: absolute;
+      bottom: 28px;
+      right: 28px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      color: #1a4f7a;
+      padding: 18px 24px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 15px 35px -10px rgba(80, 160, 255, 0.3);
+      z-index: 100;
+      letter-spacing: 0.3px;
+      font-weight: 400;
+      pointer-events: none;
+    }
+
+    #info-panel h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+      color: #0d4f7a;
+      font-weight: 500;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin: 6px 0;
+      font-size: 14px;
+    }
+
+    .key {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(100, 180, 255, 0.3);
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #0a3a5a;
+      backdrop-filter: blur(4px);
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(145deg, #c6e6ff, #aad4ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 1.2s ease;
+      color: #1a4f7a;
+      pointer-events: none;
+    }
+
+    .loader-dot {
+      width: 50px;
+      height: 50px;
+      border: 2px solid rgba(100, 180, 255, 0.3);
+      border-top: 2px solid #4a9eff;
+      border-radius: 50%;
+      animation: soft-spin 2s infinite linear;
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+
+    @keyframes soft-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .hint {
+      font-size: 12px;
+      letter-spacing: 3px;
+      opacity: 0.6;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- loading overlay -->
+  <div id="loading">
+    <div class="loader-dot"></div>
+    <div style="font-size: 20px; font-weight: 300; margin-bottom: 8px; color: #1a4f7a;">dream house</div>
+    <div style="font-size: 12px; opacity: 0.7;">light blue atmosphere · wireframe</div>
+    <div class="hint">click to drift</div>
+  </div>
+
+  <!-- minimal floating controls -->
+  <div id="info-panel">
+    <h4>light blue navigation</h4>
+    <div class="row"><span>float</span> <span class="key">WASD</span></div>
+    <div class="row"><span>rise / sink</span> <span class="key">SPACE / CTRL</span></div>
+    <div class="row"><span>drift faster</span> <span class="key">SHIFT</span></div>
+  </div>
+
+  <!-- A-Frame scene with light blue environment -->
+  <a-scene
+    id="dream-scene"
+    vr-mode-ui="enabled: false"
+    renderer="colorManagement: true; exposure: 1.2; toneMapping: ACESFilmic; antialias: true"
+    background="color: #c6e6ff"
+    fog="type: exponential; color: #c6e6ff; density: 0.002"
+  >
+    <a-assets>
+      <a-asset-item id="dreamModel" src="models/model.glb"></a-asset-item>
+        <a-asset-item id="carModel" src="models/2015 Dodge Challenger.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Light blue wireframe environment -->
+    <a-entity id="ambient-shell" position="0 0 0">
+      <!-- main sky dome -->
+      <a-sphere
+        radius="300"
+        material="shader: flat; color: #d4ecff; wireframe: true; transparent: true; opacity: 0.2; side: back"
+      ></a-sphere>
+      
+      <!-- secondary dome for depth -->
+      <a-sphere
+        radius="200"
+        material="shader: flat; color: #c0e4ff; wireframe: true; transparent: true; opacity: 0.15; side: back"
+      ></a-sphere>
+
+      <!-- floating wireframe shapes in light blue tones -->
+      <a-entity position="-80 20 -120" rotation="0 45 0">
+        <a-torus radius="12" radius-tubular="0.8" material="color: #aad0ff; wireframe: true" opacity="0.4" scale="2 2 2"></a-torus>
+      </a-entity>
+
+      <a-entity position="150 10 -200">
+        <a-icosahedron radius="20" material="color: #7fb4ff; wireframe: true" opacity="0.3" scale="1.2 1.2 1.2"></a-icosahedron>
+      </a-entity>
+
+      <a-entity position="-200 60 100">
+        <a-ring radius-inner="12" radius-outer="18" material="color: #9ac2ff; wireframe: true" opacity="0.25"></a-ring>
+      </a-entity>
+
+      <a-entity position="70 -30 250" rotation="30 60 20">
+        <a-octahedron radius="15" material="color: #c0e4ff; wireframe: true" opacity="0.25"></a-octahedron>
+      </a-entity>
+
+      <a-entity position="-250 -10 -180">
+        <a-torus-knot radius="10" radius-tubular="3" material="color: #a1c6ff; wireframe: true" opacity="0.2" scale="1.5 1.5 1.5"></a-torus-knot>
+      </a-entity>
+    </a-entity>
+
+    <!-- dream house model -->
+    <a-entity
+      id="character"
+      gltf-model="#dreamModel"
+      animation-mixer
+      position="10 -40 -150"
+      rotation="0 -90 0"
+      scale="30 30 30"
+    ></a-entity>
+
+      <!-- Car model: 2015 Dodge Challenger -->
+      <a-entity
+        id="car"
+        gltf-model="#carModel"
+          position="-300 -18 -100"
+          rotation="0 180 0"
+          scale="13 13 13"
+      ></a-entity>
+
+    <!-- Light blue lighting -->
+    <a-light type="ambient" intensity="0.7" color="#d0ecff"></a-light>
+    <a-light type="directional" intensity="1.2" position="30 40 30" color="#e8f4ff"></a-light>
+    <a-light type="directional" intensity="0.8" position="-30 20 -50" color="#b8dcff"></a-light>
+    <a-light type="point" intensity="0.5" position="10 30 20" color="#c8e4ff"></a-light>
+
+    <!-- player rig -->
+    <a-entity id="player" position="20 15 -40">
+      <a-camera id="main-camera" look-controls="enabled: false"></a-camera>
+    </a-entity>
+  </a-scene>
+
+  <!-- navigation controller -->
+  <script>
+    (function() {
+      const sceneEl = document.querySelector('a-scene');
+      const loadingEl = document.getElementById('loading');
+
+      class LightBlueNavigation {
+        constructor() {
+          this.keys = {};
+          this.velocity = new THREE.Vector3(0, 0, 0);
+          this.position = new THREE.Vector3(20, 15, -40);
+          this.theta = 0;
+          this.phi = 0;
+          this.player = document.getElementById('player');
+          this.camera = document.getElementById('main-camera');
+          this.environmentShell = document.getElementById('ambient-shell');
+          this.init();
+        }
+
+        init() {
+          if (!sceneEl) return;
+          sceneEl.addEventListener('loaded', () => {
+            if (loadingEl) {
+              loadingEl.style.opacity = '0';
+              setTimeout(() => { loadingEl.style.display = 'none'; }, 1200);
+            }
+            this.setupInput();
+            this.startLoop();
+          });
+        }
+
+        setupInput() {
+          document.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            this.keys[key] = true;
+            if (key === ' ' || key === 'control') e.preventDefault();
+          });
+          document.addEventListener('keyup', (e) => {
+            const key = e.key.toLowerCase();
+            this.keys[key] = false;
+          });
+
+          document.body.addEventListener('click', () => {
+            if (!document.pointerLockElement) {
+              document.body.requestPointerLock();
+            }
+          });
+
+          document.addEventListener('mousemove', (e) => {
+            if (document.pointerLockElement) {
+              this.theta -= e.movementX * 0.0025;
+              this.phi -= e.movementY * 0.0025;
+              this.phi = Math.max(-1.4, Math.min(1.4, this.phi));
+            }
+          });
+        }
+
+        startLoop() {
+          let lastTime = performance.now();
+          const tick = (now) => {
+            const dt = Math.min(0.1, (now - lastTime) / 1000);
+            lastTime = now;
+
+            const forward = new THREE.Vector3(Math.sin(this.theta), 0, Math.cos(this.theta));
+            const right = new THREE.Vector3(Math.sin(this.theta - Math.PI/2), 0, Math.cos(this.theta - Math.PI/2));
+            const moveDir = new THREE.Vector3(0, 0, 0);
+
+            if (this.keys['w']) moveDir.add(forward.clone().negate());
+            if (this.keys['s']) moveDir.add(forward);
+            if (this.keys['a']) moveDir.add(right.clone().negate());
+            if (this.keys['d']) moveDir.add(right);
+            if (this.keys[' ']) moveDir.y += 1;
+            if (this.keys['control']) moveDir.y -= 1;
+
+            const speed = this.keys['shift'] ? 45 : 18;
+            if (moveDir.lengthSq() > 0) moveDir.normalize().multiplyScalar(speed);
+
+            this.velocity.lerp(moveDir, 0.15);
+            this.position.add(this.velocity.clone().multiplyScalar(dt));
+
+            if (this.player) this.player.setAttribute('position', this.position);
+            if (this.environmentShell) this.environmentShell.setAttribute('position', this.position);
+
+            if (this.camera?.object3D) {
+              this.camera.object3D.quaternion.setFromEuler(new THREE.Euler(this.phi, this.theta, 0, 'YXZ'));
+            }
+
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }
+
+      if (sceneEl) {
+        new LightBlueNavigation();
+      } else {
+        window.addEventListener('DOMContentLoaded', () => {
+          new LightBlueNavigation();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
